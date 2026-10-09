@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url('/menu/fondo.png'); /* Ruta de la imagen en tu carpeta */
+    background-size: cover; /* Ajusta el tamaño de la imagen para que cubra todo el fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */  
+    color: #1f1919;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    padding: 50px;
+  }
+  
+
+  .title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #1f1919;
+  }
+  
+  .message {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+  }
+  
+  .button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    color: #1f1919;
+    background-color: #e692e9;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #557a95;
+  }
+
+  
+  

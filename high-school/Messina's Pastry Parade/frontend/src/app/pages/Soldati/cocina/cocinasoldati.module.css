@@ -1,0 +1,104 @@
+.imgSoldatiCocina {
+    position: relative; /* Asegura que los elementos hijos se posicionen relativamente */
+    height: 99vh; /* Asegura que ocupe toda la pantalla */
+    width: 100%;
+    background-image: url('/escenarios/cocinas/CocinaSoldati.png'); /* Ruta de la imagen en tu carpeta */
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+.imgBudinSinCocinar {
+    position: absolute;
+    height: 200px;
+    width: 290px;
+    top: 380px;
+    left: 650px;
+    transform: rotate(4deg);
+    z-index: 30;
+    cursor: pointer;
+}
+
+.imgBudinCocido {
+    position: absolute;
+    height: 180px;
+    width: 250px;
+    top: 370px; /* Ajusta la posición según tus necesidades */
+    left: 160px;
+    z-index: 20;
+    cursor: pointer;
+}
+
+.imgVainilla {
+    position: absolute;
+    height: 120px;
+    width: 100px;
+    top: 401px; /* Ajusta la posición según tus necesidades */
+    left: 500px;
+    z-index: 25;
+    cursor: pointer;
+}
+
+.imgBudinLimon {
+    position: absolute;
+    height: 100px;
+    width: 120px;
+    top: 370px;
+    left: 1200px;
+    cursor: pointer;
+}
+
+.imgBudinChocolate {
+    position: absolute;
+    height: 100px;
+    width: 120px;
+    top: 370px;
+    left: 1200px;
+    cursor: pointer;
+}
+
+.imgChocolate {
+    position: absolute;
+    height: 150px;
+    width: 190px;
+    top: 390px;
+    left: 320px;
+    cursor: pointer;
+}
+
+/*.imgCintaMecanica {
+    position: absolute;
+    height: 700px;
+    width: 380px;
+    right: 1320px;
+    top: 146px;
+    transform: rotate(10deg);
+    transform: rotateY(190deg);
+
+}*/
+
+.imgArrowLeft {
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: 40%; /* Centrado verticalmente */
+    left: 10px;
+    transform: rotate(180deg);
+    cursor: pointer;
+    z-index: 40;
+}
+
+
+.diaTerminado {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 2rem;
+    text-align: center;
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}

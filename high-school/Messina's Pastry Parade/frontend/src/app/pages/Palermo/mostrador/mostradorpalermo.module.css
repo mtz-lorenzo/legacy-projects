@@ -1,0 +1,251 @@
+/* Estilo para el contenedor principal con la imagen de fondo */
+.imgPalermo {
+    position: relative;
+    height: 99vh; /* Asegura que ocupe toda la pantalla */
+    width: 100%;
+    background-image: url('/escenarios/mostradores/PALERMO.png'); /* Ruta de la imagen en tu carpeta */
+    background-size: cover;
+    background-position: center;
+    overflow: hidden; /* Evita que cualquier contenido sobresalga */
+}
+
+/* Estilo para la radio (imagen interactiva) */
+#playImg {
+    width: 120px; /* Ajusta el tamaño de la radio */
+    height: auto; /* Mantiene la proporción de la imagen */
+    position: absolute; /* Posición absoluta para controlarla en la pantalla */
+    top: 470px; /* Ajusta la posición verticalmente */
+    left: 90%; /* Ajusta la posición horizontalmente */
+    cursor: pointer; /* Añade un cursor de mano al pasar por encima */
+    z-index: 100; /* Asegura que esté por encima de otros elementos */
+    transform: translateX(-50%); /* Centra la imagen horizontalmente */
+    pointer-events: auto; /* Habilita los clics solo en esta imagen */
+}
+
+/* Botón en la esquina inferior izquierda */
+.openModalButton {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #febfff;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 16px;
+}
+
+/* Estilo del modal centrado en la pantalla */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Contenido del modal centrado */
+.modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    position: relative; /* Para ubicar el botón de cierre de manera absoluta */
+}
+
+/* Botón para cerrar el modal alineado al texto */
+.closeModalButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px;
+    background-color: #f73d30;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Contenedor de texto alineado con el botón de cierre */
+.modalText {
+    margin-top: 0; /* Elimina el espacio superior */
+    padding-top: 5px; /* Ajusta la alineación con el botón de cerrar */
+    line-height: 1.5;
+}
+
+/* Imagen que aparece y desaparece */
+.appearImage {
+    position: absolute;
+    top: 460px; /* Centra verticalmente */
+    left: -600px; /* Comienza más afuera de la pantalla */
+    transform: translateY(-50%); /* Centra verticalmente */
+    max-width: 570px;
+    max-height: 570px;
+    z-index: 10;
+    transition: left 1s ease-in-out; /* Suaviza el movimiento */
+}
+
+/* Clase que desliza la imagen hacia adentro */
+.slideIn {
+    left: 20%; /* Detente en el 20% de la pantalla desde la izquierda */
+}
+
+/* Clase que desliza la imagen hacia afuera */
+.slideOut {
+    left: 120%; /* Desliza fuera de la pantalla hacia la derecha */
+    transition: left 0.7s ease-in-out; /* Tiempo y estilo de transición */
+}
+
+
+/* Botón para cerrar el modal */
+.closeModalButton {
+    padding: 10px;
+    background-color: #f73d30;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Contenedor para la imagen y el diálogo */
+.characterContainer {
+    position: relative;
+}
+
+/* Cuadro de diálogo estilo burbuja */
+.dialogueBox {
+    position: absolute;
+    top: 370px; /* Ajusta según necesites para la posición del cuadro de diálogo */
+    left: 60%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+    z-index: 20;
+}
+
+/* Texto del temporizador dentro del cuadro de diálogo */
+.timerText {
+    font-weight: bold;
+    color: red; /* Cambia el color según tu preferencia */
+}
+
+.imgRadio {
+    position: absolute;
+    top: 500px;
+    left: 1530px;
+    width: 750px;
+    height: 380px;
+    z-index: 50;
+}
+
+.largerImage {
+    transform: scale(2.2); /* Ajusta el valor según el tamaño deseado */
+    top: 328px;
+}
+
+.budinImageContainer {
+    position: absolute; /* Cambia a absolute para poder moverlo */
+    top: 590px; /* Ajusta según necesites */
+    right: 830px; /* Ajusta según necesites */
+    width: 350px; /* Cambia el tamaño si es necesario */
+    cursor: pointer;
+    z-index: 30; /* Asegúrate de que esté frente a los clientes */
+}
+
+.budinImageChocolate {
+    position: absolute;
+    top: 584px;
+    right: 1200px;
+    width: 350px;
+    cursor: pointer;
+    z-index: 30;
+}
+
+.imgCajaRegistradoraLiniers {
+    position: absolute;
+    top: 540px;
+    width: 480px;
+    height: 305px;
+    left: 1150px;
+    z-index: 30;
+}
+
+.persiana {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    background-image: url('/objetos/cortina.png');
+    background-size: cover; /* Asegura que la textura cubra todo el ancho */
+    background-repeat: no-repeat;
+    overflow: hidden;
+    z-index: 10; /* Asegura que esté detrás del budín y la radio */
+    transition: height 0.6s ease-in-out;
+}
+
+/* Clase que controla la altura de la persiana cuando está "cerrada" */
+.persiana.abierta {
+    height: 73vh; /* Baja hasta un poco más de la mitad */
+}
+
+/* Botón para abrir y cerrar la persiana */
+.persianaButton {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #8e8888;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 9999; /* Asegura que esté sobre la persiana */
+}
+
+.policeAlert {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  transition: all 1s ease-out; /* Transición suave */
+}
+
+.diaTerminado {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 2rem;
+    text-align: center;
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+

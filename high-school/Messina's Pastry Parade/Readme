@@ -1,0 +1,92 @@
+# 🧁 Messina's Pastry Parade 
+# Developed by Monobloque Game Studios
+
+> **[ES]** Un juego cooperativo de FoodTruck ambientado en la Ciudad Autónoma de Buenos Aires.  
+> **[ENG]** A cooperative FoodTruck game set across the Autonomous City of Buenos Aires.
+
+---
+Run tutorial:
+
+1. Install Node.js on your computer
+2. Run: npm install in backend and frontend folder's terminal
+3. Install packages specified in index.js with npm install {package}
+4. Create .env file in backend folder following '.env.example' file indications
+5. Install MySQL workbench and MySQL server, create your server and password, use it for env file
+6. Backend --> Terminal --> npx nodemon index.js
+7. Frontend --> Terminal --> npm run dev
+8. Repeat in another computer
+9. Create a room pin and join with the same code on both computers
+10. One player joins as 'cocina', the other joins as 'mostrador'
+11. Play
+---
+
+## 🇦🇷 Español
+
+### 📖 Acerca del Juego
+**Messina's Pastry Parade** es un juego cooperativo de gestión y cocina ambientado en un FoodTruck de repostería que recorre las calles de la Ciudad Autónoma de Buenos Aires (CABA). 
+
+El juego está diseñado para **2 jugadores en simultáneo**:
+* **El Mostrador:** Atiende a los clientes, toma pedidos y cobra.
+* **La Cocina:** Prepara y hornea los budines de diferentes sabores.
+
+Ambos jugadores deben coordinarse en tiempo real para preparar, cocinar y vender la mayor cantidad de budines posible, acumular ganancias y avanzar a través de los distintos escenarios representativos de la ciudad.
+
+---
+
+### 📜 Una Historia Real
+La idea surge del pasado de uno de los desarrolladores, quien desde los 12 años vendió budines en la calle por toda la ciudad para sobrevivir a la crisis del 2001 y alimentar a su hermano menor, Jhon. Este proyecto rinde homenaje a esa lucha transformándola en una experiencia lúdica y colaborativa.
+
+---
+
+### 🎨 Diseño y Cultura
+* **Escenarios:** Fondos inspirados en locaciones icónicas de Buenos Aires.
+* **Diversidad de Clientes:** Personajes que representan distintas culturas, clases sociales y religiones de la Argentina, estilizados con filtros de estética retro (PlayStation 2).
+* **Easter Eggs:** Múltiples referencias y detalles culturales ocultos en cada mapa.
+
+---
+
+### 🛠️ Tecnologías Utilizadas
+* **Frontend:** Next.js / React
+* **Backend:** Node.js / Express
+* **Base de Datos:** MySQL
+* **Lenguaje:** JavaScript
+
+---
+
+### 💬 Comentarios de los Testers
+> *"Es el juego del año"*  
+> *"Original, muy creativo"*  
+> *"Best game I’ve ever played"*
+
+---
+
+## 🌎 English
+
+### 📖 About the Game
+**Messina's Pastry Parade** is a 2-player cooperative FoodTruck management game set across iconic locations in the Autonomous City of Buenos Aires (CABA).
+
+The game relies on real-time teamwork between two rooms:
+* **The Counter:** Takes customer orders, serves food, and manages sales.
+* **The Kitchen:** Prepares and bakes various flavored pastries/puddings.
+
+Players must synchronize their efforts to serve as many customers as possible, increase their earnings, and unlock new stages across the city.
+
+---
+
+### 📜 Inspired by a True Story
+The game's concept originates from the real-life story of one of the developers who, starting at age 12, sold pastries on the streets of Buenos Aires to navigate the 2001 economic crisis and provide for his younger brother, Jhon.
+
+---
+
+### 🎨 Art & Features
+* **Buenos Aires Landmarks:** Custom backgrounds based on real locations in CABA.
+* **Diverse Customers:** Inclusion of diverse cultural, social, and religious backgrounds, enhanced with a PS2-era retro aesthetic filter.
+* **Argentine Easter Eggs:** Hidden cultural references throughout the scenarios.
+
+---
+
+### 🛠️ Tech Stack
+* **Frontend:** Next.js / React
+* **Backend:** Node.js / Express
+* **Database:** MySQL
+* **Language:** JavaScript

@@ -1,0 +1,33 @@
+.button { 
+    border: none;
+    border-radius: 30px;
+    color: #000; /* Texto negro */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    height: 37px;
+    justify-content: center;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+} 
+
+.button:hover {
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.variant_jugar {
+    background-color: #eb8686; /* Rojo */
+}
+
+.variant_puntuacion {
+    background-color: #eb8686; /* Rojo */
+}
+
+.variant_salir {
+    background-color: #eb8686; /* Rojo */
+}

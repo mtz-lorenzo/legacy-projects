@@ -1,0 +1,110 @@
+/* Main container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif; /* Modern and sleek font */
+    background-color: #dfcfcf; /* Deep black background for luxury */
+    padding: 20px;
+}
+
+/* Heading Styles */
+.heading {
+    font-size: 32px;
+    color: #971636; /* Bold, soft pink for heading */
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700; /* Strong weight for modern look */
+}
+
+/* Links */
+.link {
+    text-decoration: none;
+    color: #df1648; /* Wine red color for links */
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #7e0624; /* Slightly darker wine red on hover */
+}
+
+/* Form Styles */
+.input {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 1px solid #333; /* Dark border to match the overall aesthetic */
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #222222; /* Dark gray for input background */
+    color: #fff; /* White text for contrast */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #7e0624; /* Pink on focus */
+    box-shadow: 0 0 8px rgba(255, 79, 123, 0.5);
+}
+
+/* Button Styles */
+.button {
+    width: 100%;
+    padding: 14px;
+    background-color: #7e0624; /* Soft pink for button */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-weight: 600;
+}
+
+.button:hover {
+    background-color: #7e0624; /* Wine red on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Login/Register Form Container */
+.formContainer {
+    max-width: 420px;
+    width: 100%;
+    background-color: #333333; /* Dark background for form container */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Depth from shadows */
+    text-align: center;
+}
+
+/* Active form container (Login/Register) */
+.loginContainer,
+.registerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Small device adjustments */
+@media (max-width: 600px) {
+    .heading {
+        font-size: 28px;
+    }
+
+    .formContainer {
+        padding: 20px;
+    }
+
+    .input {
+        font-size: 14px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
+}
