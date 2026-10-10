@@ -1,59 +1,69 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import styles from './clientes.module.css'; // Importa los estilos
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './clientes.module.css';
 
-const Cliente = ({ cliente, onPedidoEntregado, budinSeleccionado, resetBudinSeleccionado }) => {
-    const [visible, setVisible] = useState(false); // Para gestionar la visibilidad del cliente
-    const [comentario, setComentario] = useState(''); // Comentario a mostrar (llegada/salida)
-    const [isLeaving, setIsLeaving] = useState(false); // Para gestionar el slide out
+const TIEMPO_ESPERA = 20000;
+const DURACION_SALIDA = 1000;
+
+const Cliente = ({
+    cliente,
+    onPedidoEntregado,   // el jugador le entregó un budín
+    onClienteSeVa,       // se cansó de esperar (sin entrega)
+    budinSeleccionado,
+    resetBudinSeleccionado,
+}) => {
+    const [visible, setVisible] = useState(false);
+    const [comentario, setComentario] = useState('');
+    const [isLeaving, setIsLeaving] = useState(false);
+    const saliendoRef = useRef(false); // evita salidas dobles (clic + timeout)
 
     useEffect(() => {
-        if (cliente) {
-            console.log("Imagen del cliente:", `/public/clientes/${cliente.skin}`);
-            setComentario(cliente.comentarioLlegada);
-            setVisible(true);
+        if (!cliente) return;
 
-            const timer = setTimeout(() => {
-                iniciarSalida();
-            }, 20000);
+        saliendoRef.current = false;
+        setComentario(cliente.comentarioLlegada);
+        setVisible(true);
 
-            return () => clearTimeout(timer);
-        }
+        const timer = setTimeout(() => iniciarSalida(false), TIEMPO_ESPERA);
+        return () => clearTimeout(timer);
     }, [cliente]);
 
-    // Función para iniciar la salida del cliente actual
-    const iniciarSalida = () => {
-        setComentario(cliente.comentarioSalida);
-        setIsLeaving(true); // Inicia la animación de salida
+    const iniciarSalida = (entregado) => {
+        if (saliendoRef.current) return;
+        saliendoRef.current = true;
 
-        // Después de la animación, llama la función de entrega
+        setComentario(cliente.comentarioSalida);
+        setIsLeaving(true);
+
         setTimeout(() => {
             setIsLeaving(false);
             setVisible(false);
-            resetBudinSeleccionado(); // Resetea la selección del budín
-            onPedidoEntregado(); // Notifica a la página principal que el cliente se ha ido
-        }, 1000); // Ajusta la duración de la animación de salida
+            resetBudinSeleccionado();
+
+            if (entregado) {
+                onPedidoEntregado();
+            } else {
+                onClienteSeVa();
+            }
+        }, DURACION_SALIDA);
     };
 
-    // Función para manejar el clic en el cliente
     const handleClienteClick = () => {
-        if (budinSeleccionado) { // Verifica si hay un budín seleccionado
-            iniciarSalida(); // Llama a la función para iniciar la salida del cliente
-        }
+        if (!budinSeleccionado) return; // sin budín seleccionado, el clic no hace nada
+        iniciarSalida(true);
     };
 
     return (
         <div className={`${styles.clienteContainer} ${visible ? styles.slideIn : ''} ${isLeaving ? styles.slideOut : ''}`}>
             {cliente && (
                 <div className={styles.cliente} onClick={handleClienteClick}>
-                    {/* Imagen del cliente */}
                     <img
                         src={`/clientes/${cliente.skin}`}
+                        alt="Cliente"
                         className={styles.clienteSkin}
                     />
                     <div className={styles.dialogueBox}>
-                        {/* Comentario como diálogo tipo cómic */}
                         <p>{comentario}</p>
                     </div>
                 </div>

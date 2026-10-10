@@ -1,93 +1,72 @@
+/* Contenedor principal sin deformación */
 .imgSoldatiCocina {
-    position: relative; /* Asegura que los elementos hijos se posicionen relativamente */
-    height: 99vh; /* Asegura que ocupe toda la pantalla */
-    width: 100%;
-    background-image: url('/escenarios/cocinas/CocinaSoldati.png'); /* Ruta de la imagen en tu carpeta */
-    background-size: cover;
+    position: relative;
+    width: min(100vw, 177.78vh);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin: auto;
+
+    background-image: url('/escenarios/cocinas/CocinaSoldati.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     background-position: center;
+
     overflow: hidden;
+    --u: min(1vw, 1.7778vh);
 }
 
+/* Budín crudo / en preparación */
 .imgBudinSinCocinar {
     position: absolute;
-    height: 200px;
-    width: 290px;
-    top: 380px;
-    left: 650px;
-    transform: rotate(4deg);
+    height: 18%;
+    width: 14%;
     z-index: 30;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
+/* Budín cocido */
 .imgBudinCocido {
     position: absolute;
-    height: 180px;
-    width: 250px;
-    top: 370px; /* Ajusta la posición según tus necesidades */
-    left: 160px;
-    z-index: 20;
+    height: 18%;
+    width: 14%;
+    z-index: 30;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
+/* Botellas de Vainilla y Chocolate sobre la mesa */
 .imgVainilla {
     position: absolute;
-    height: 120px;
-    width: 100px;
-    top: 401px; /* Ajusta la posición según tus necesidades */
-    left: 500px;
+    height: 12%;
+    width: 4.5%;
+    top: 46%;
+    left: 30.5%;
     z-index: 25;
-    cursor: pointer;
-}
-
-.imgBudinLimon {
-    position: absolute;
-    height: 100px;
-    width: 120px;
-    top: 370px;
-    left: 1200px;
-    cursor: pointer;
-}
-
-.imgBudinChocolate {
-    position: absolute;
-    height: 100px;
-    width: 120px;
-    top: 370px;
-    left: 1200px;
     cursor: pointer;
 }
 
 .imgChocolate {
     position: absolute;
-    height: 150px;
-    width: 190px;
-    top: 390px;
-    left: 320px;
+    height: 14%;
+    width: 8%;
+    top: 45%;
+    left: 21.5%;
+    z-index: 25;
     cursor: pointer;
 }
-
-/*.imgCintaMecanica {
-    position: absolute;
-    height: 700px;
-    width: 380px;
-    right: 1320px;
-    top: 146px;
-    transform: rotate(10deg);
-    transform: rotateY(190deg);
-
-}*/
 
 .imgArrowLeft {
     position: absolute;
-    height: 80px;
-    width: 80px;
-    top: 40%; /* Centrado verticalmente */
-    left: 10px;
+    height: 15%;
+    width: 10%;
+    top: 40%;
+    left: 5%;
     transform: rotate(180deg);
     cursor: pointer;
-    z-index: 40;
+    z-index: 9999;
+    outline: 2px solid red;
 }
-
 
 .diaTerminado {
     position: absolute;
@@ -96,9 +75,115 @@
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 20px;
+    padding: 20px 40px;
     border-radius: 10px;
     font-size: 2rem;
     text-align: center;
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+    z-index: 1000;
+}
+
+
+/* Transición común para los objetos interactivos */
+.imgVainilla,
+.imgChocolate,
+.imgBudinSinCocinar,
+.imgBudinCocido {
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover: resplandor blanco y ligero aumento */
+.imgVainilla:hover,
+.imgChocolate:hover,
+.imgBudinSinCocinar:hover,
+.imgBudinCocido:hover {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+    transform: scale(1.06);
+}
+
+/* Ingrediente seleccionado: resplandor dorado persistente */
+.selected {
+    filter: drop-shadow(0 0 10px rgba(255, 210, 60, 1));
+    transform: scale(1.06);
+}
+
+
+.ticket {
+    position: absolute;
+    top: 0.1%;
+    left: 3%;
+    width: 16%;
+    padding: 0.8em 1em;
+    font-size: calc(var(--u) * 0.9);
+    background: #fffbe6;
+    color: #222;
+    border: 2px dashed #b9a95a;
+    border-radius: 0.5em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    z-index: 40;
+}
+
+.ticketTitulo {
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-bottom: 1px dashed #b9a95a;
+    padding-bottom: 0.3em;
+}
+
+.ticketBudin {
+    font-size: 1.1em;
+    text-transform: capitalize;
+}
+
+.ticketBoton {
+    background: #febfff;
+    border: none;
+    border-radius: 0.4em;
+    padding: 0.5em;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.ticketBoton:disabled {
+    background: #cfcfcf;
+    cursor: default;
+}
+
+/* Zona clickeable del horno (invisible hasta que hay un crudo seleccionado) */
+.horno {
+    position: absolute;
+    top: 58%;
+    left: 69%;
+    width: 27%;
+    height: 39%;
+    border-radius: 8px;
+    z-index: 20;
+    pointer-events: none;   /* no se puede clickear si no hay nada seleccionado */
+}
+
+.hornoTitila {
+    pointer-events: auto;
+    cursor: pointer;
+    animation: titilar 1s ease-in-out infinite;
+}
+
+@keyframes titilar {
+    0%, 100% {
+        background: rgba(255, 210, 60, 0);
+        box-shadow: 0 0 0 rgba(255, 210, 60, 0);
+    }
+    50% {
+        background: rgba(255, 210, 60, 0.18);
+        box-shadow: 0 0 25px 8px rgba(255, 210, 60, 0.9);
+    }
+}
+
+/* Budín cocinándose: sin hover ni clic */
+.cocinando {
+    pointer-events: none;
+    cursor: default;
 }

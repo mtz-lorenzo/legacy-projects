@@ -1,4 +1,4 @@
-// Installed Packages: -g nodemon, express, body-parser, mysql2, socket.io, cors
+// Installed Packages: -g nodemon, express, body-parser, mysql2, socket.io, cors, dotenv
 // Terminal --> "npx nodemon index.js"
 
 const express = require('express');						// Web server
@@ -12,6 +12,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));	
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json());
 
 const LISTEN_PORT = 4000;								
 
@@ -149,6 +150,16 @@ io.on("connection", (socket) => {
 		console.log(data);
 		//Hay que hacer que solo se lo mande al de la sala
 		io.emit('scoreCocina', {score: data.score});
+	});
+
+	socket.on('pedidoMostrador', data => {
+		console.log(data);
+		//Hay que hacer que solo se lo mande al de la sala
+		io.emit('pedidoCocina', { budin: data.budin });
+	});
+
+	socket.on('pedidoCancelado', () => {
+		io.emit('pedidoCancelado');
 	});
 
 	socket.on('disconnect', () => {

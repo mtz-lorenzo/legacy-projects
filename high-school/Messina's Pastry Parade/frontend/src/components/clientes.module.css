@@ -1,86 +1,79 @@
 /* clientes.module.css */
 
-/* Contenedor del cliente */
 .clienteContainer {
-    position: absolute; /* Posiciona el contenedor de forma absoluta */
-    bottom: 255px;           /* Coloca el contenedor en la parte inferior */
-    left: 40px;          /* Ajusta la distancia desde la izquierda */
-    z-index: 10;         /* Asegura que esté por encima de otros elementos */
+    position: absolute;
+    bottom: 23.6%;      /* 255px */
+    left: 2.1%;         /* 40px  */
+    width: 28.6%;       /* 550px */
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/* Animación de entrada del cliente */
+.cliente {
+    width: 100%;
+}
+
 .slideIn {
-    animation: slideIn 1s ease-in-out; /* Añade animación para la entrada */
+    animation: slideIn 1s ease-in-out;
 }
 
-/* Animación de salida del cliente */
 .slideOut {
-    animation: slideOut 1s ease-in-out; /* Añade animación para la salida */
+    animation: slideOut 1s ease-in-out forwards;
 }
 
-/* Ajustes para la imagen del cliente (skin) */
 .clienteSkin {
-    width: 550px; /* Ajusta el tamaño de la imagen */
-    height: auto; /* Mantiene la relación de aspecto */
-    max-height: 570px; /* Limita el tamaño máximo de la imagen */
-    position: relative; /* Necesario para que el diálogo se posicione sobre ella */
+    display: block;
+    width: 100%;
+    height: auto;
+    position: relative;
 }
 
-/* Animación para la entrada (deslizar hacia adentro) */
 @keyframes slideIn {
-    from {
-        left: -600px; /* Inicia desde la izquierda */
-    }
-    to {
-        left: 20px; /* Llega hasta la posición establecida */
-    }
+    from { transform: translateX(-130%); }
+    to   { transform: translateX(0); }
 }
 
-/* Animación para la salida (deslizar hacia afuera) */
 @keyframes slideOut {
-    from {
-        left: 20px; /* Inicia desde la posición establecida */
-    }
-    to {
-        left: -600px; /* Se va hacia la izquierda */
-    }
+    from { transform: translateX(0); }
+    to   { transform: translateX(-130%); }
 }
 
-/* Caja de diálogo estilo cómic (comentario) */
+/* Globo de diálogo */
 .dialogueBox {
     position: absolute;
-    top: -50px; /* Ajusta la posición del cuadro de diálogo por encima del cliente */
+    top: -9%;
     left: 50%;
-    transform: translateX(-50%); /* Centra el cuadro de diálogo */
-    background-color: #f1f1f1; /* Fondo blanco con un toque suave */
-    padding: 10px 20px;
-    border-radius: 15px; /* Bordes redondeados */
-    font-size: 14px;
+    transform: translateX(-50%);
+    background-color: #f1f1f1;
+    padding: 0.7em 1.4em;
+    border-radius: 1em;
+    font-size: calc(var(--u, 1vw) * 0.73);
     color: #333;
     z-index: 20;
-    text-align: center; /* Centra el texto */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    max-width: 300px; /* Limita el ancho máximo */
-    min-width: 150px; /* Ancho mínimo */
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 55%;
+    min-width: 27%;
 }
 
-/* El "pico" del diálogo estilo cómic */
+.dialogueBox p {
+    margin: 0;
+}
+
 .dialogueBox::after {
     content: '';
     position: absolute;
-    bottom: -10px; /* Posiciona el pico debajo del cuadro */
+    bottom: -0.7em;
     left: 50%;
     transform: translateX(-50%);
-    border-width: 10px;
+    border-width: 0.7em;
     border-style: solid;
-    border-color: #f1f1f1 transparent transparent transparent; /* Color blanco */
+    border-color: #f1f1f1 transparent transparent transparent;
 }
 
-/* Estilo para el texto del temporizador */
 .timerText {
     font-weight: bold;
     color: red;

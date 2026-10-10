@@ -1,141 +1,184 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./cocinasoldati.module.css";
 import { useSocket } from "@/hooks/socket";
 import Score from '@/components/Score';
 import { useRouter } from 'next/navigation';
 
+export default function CocinaLogica() {
+    // POSICIONES EN % (Mesada vs Horno)
+const POSICION_INICIAL = { top: "44%", left: "42%" };
+const POSICION_HORNO = { top: "65%", left: "76%" };
+const POSICION_LISTO = { top: "44%", left: "42%" };
 
-
-export default function cocinaLogica() {
-    const [budinPosition, setBudinPosition] = useState({ top: 372, left: 650 });
-    const [isPlaced, setIsPlaced] = useState(false);
+    const [budinPosition, setBudinPosition] = useState(POSICION_INICIAL);
+    const [isRawSelected, setIsRawSelected] = useState(false);
+    const [isCooking, setIsCooking] = useState(false);
+    const cookTimerRef = useRef(null);
+    const dingRef = useRef(null);
     const [isCooked, setIsCooked] = useState(false);
     const [isVainillaSelected, setIsVainillaSelected] = useState(false);
     const [isChocolateSelected, setIsChocolateSelected] = useState(false);
-    const [budinType, setBudinType] = useState(null); // "vainilla" o "chocolate"
-    const [isBudinFinalSelected, setIsBudinFinalSelected] = useState(false); // Estado para mostrar la flecha
+    const [budinType, setBudinType] = useState(null);
+    const [isBudinFinalSelected, setIsBudinFinalSelected] = useState(false);
     const [score, setScore] = useState(0);
     const [contadorBudines, setContadorBudines] = useState(0);
+    const [pedidoCocina, setPedidoCocina] = useState(null);
     const [mensajeDiaTerminado, setMensajeDiaTerminado] = useState(false);
+    
     const { socket, isConnected } = useSocket();
     const router = useRouter();
 
-
+    // Sockets
     useEffect(() => {
         if (!socket) return;
-
-        // Escucha del evento 'scoreCocina' y actualiza el estado del score
-        socket.on("scoreCocina", (data) => {
-            if (data.score !== 0) {
+        const handleScore = (data) => {
+            if (data && typeof data.score === 'number') {
                 setScore(data.score);
             }
-        });
-
-        // Cleanup al desmontar el componente
-        return () => {
-            socket.off("scoreCocina");
         };
+        socket.on("scoreCocina", handleScore);
+        return () => socket.off("scoreCocina", handleScore);
     }, [socket, isConnected]);
 
     useEffect(() => {
+        if (!socket) return;
+        const handlePedido = (data) => setPedidoCocina(data.budin);
+        const handleCancelado = () => setPedidoCocina(null);
+
+        socket.on("pedidoCocina", handlePedido);
+        socket.on("pedidoCancelado", handleCancelado);
+        return () => {
+            socket.off("pedidoCocina", handlePedido);
+            socket.off("pedidoCancelado", handleCancelado);
+        };
+    }, [socket, isConnected]);
+
+    // Flujo de victoria
+    useEffect(() => {
         if (score >= 1400) {
-            // Tercer timeout aquí (por ejemplo, esperando 3 segundos más)
-            setTimeout(() => {
-                setMensajeDiaTerminado(true); // Muestra el mensaje "DÍA 1 TERMINADO"
-
-                // Espera 5 segundos y verifica el score
-                setTimeout(() => {
-                    // Redirige a la nueva página si el score es igual a 1400
-                    router.push('/pages/Liniers/cocina');
-                }, 13000);
-
-            }, 8000);
-            // Redirige cuando el score llega exactamente a 1500
-        } else {
-            // Reinicia el nivel recargando la página actual
-            window.location.reload();
+            const t1 = setTimeout(() => {
+                setMensajeDiaTerminado(true);
+                const t2 = setTimeout(() => router.push('/pages/Liniers/cocina'), 5000);
+                return () => clearTimeout(t2);
+            }, 3000);
+            return () => clearTimeout(t1);
         }
-    }, [score]);
+    }, [score, router]);
 
+    useEffect(() => {
+        return () => clearTimeout(cookTimerRef.current);
+    }, []);
+
+    useEffect(() => {
+        dingRef.current = new Audio('/sound/horno.mp3');
+        dingRef.current.volume = 0.7;
+    }, []);
+
+    // 1. Clic en el molde crudo: lo selecciona (o lo deselecciona)
     const handleBudinClick = () => {
-        if (!isPlaced) {
-            setIsPlaced(true);
-        }
+        if (isCooking) return;
+        setIsRawSelected((prev) => !prev);
     };
 
-    const handleVainillaClick = () => {
-        if (!budinType) setIsVainillaSelected(true);
-    };
+    // 2. Clic en el horno: cocina el budín seleccionado
+    const handleHornoClick = () => {
+        if (!isRawSelected || isCooking || isCooked) return;
 
-    const handleChocolateClick = () => {
-        if (!budinType) setIsChocolateSelected(true);
-    };
+        setIsRawSelected(false);
+        setIsCooking(true);
+        setBudinPosition(POSICION_HORNO);
 
-    const handleContainerClick = (e) => {
-        if (isCooked || !isPlaced) return;
-
-        const rect = e.currentTarget.getBoundingClientRect();
-        const newTop = rect.bottom - 332;
-        const newLeft = rect.right - 410;
-
-        setBudinPosition({ top: newTop, left: newLeft });
-        setIsPlaced(true);
-
-        setTimeout(() => {
+        cookTimerRef.current = setTimeout(() => {
+            setIsCooking(false);
             setIsCooked(true);
-            setBudinPosition({ top: 382, left: 680 });
+            setBudinPosition(POSICION_LISTO);
+
+        // Sonido al salir del horno
+        if (dingRef.current) {
+            dingRef.current.currentTime = 0;
+            dingRef.current.play().catch(() => {});
+            }            
         }, 6000);
     };
 
+    // 3. Selección de sabor
+    const handleVainillaClick = () => {
+        if (!budinType) {
+            setIsVainillaSelected(true);
+            setIsChocolateSelected(false);
+        }
+    };
+
+    const handleChocolateClick = () => {
+        if (!budinType) {
+            setIsChocolateSelected(true);
+            setIsVainillaSelected(false);
+        }
+    };
+
+    // 4. Aplicar sabor al budín cocido
     const handleBudinCocidoClick = () => {
         if (!isCooked || budinType) return;
 
         if (isVainillaSelected) {
             setBudinType("vainilla");
             setIsVainillaSelected(false);
-            setIsBudinFinalSelected(true); // Muestra la flecha
+            setIsBudinFinalSelected(true); // Activa la flecha
         } else if (isChocolateSelected) {
             setBudinType("chocolate");
             setIsChocolateSelected(false);
-            setIsBudinFinalSelected(true); // Muestra la flecha
+            setIsBudinFinalSelected(true); // Activa la flecha
         }
     };
 
+    // 5. Clic en la flecha para entregar el pedido
     const handleArrowClick = () => {
-        setIsBudinFinalSelected(false); // Oculta el budín cuando se hace clic en la flecha
+        setIsBudinFinalSelected(false);
         setIsCooked(false);
-        socket.emit("budinCocina", { budin: budinType });
-        setContadorBudines(contadorBudines + 1);
+        setIsRawSelected(false);
+        setBudinPosition(POSICION_INICIAL); // Resetea la posición al molde original
+        
+        if (socket) {
+            socket.emit("budinCocina", { budin: budinType });
+        }
+        setContadorBudines((prev) => prev + 1);
         setBudinType(null);
+        setPedidoCocina(null);
     };
 
     return (
-        <div className={styles.imgSoldatiCocina} onClick={handleContainerClick}>
+        <div className={styles.imgSoldatiCocina}>
             <Score score={score} />
+            {pedidoCocina && (
+                <div className={styles.ticket}>
+                    <span className={styles.ticketTitulo}>PEDIDO</span>
+                    <span className={styles.ticketBudin}>Budín de {pedidoCocina}</span>
+                </div>
+            )}
 
+            <div
+                className={`${styles.horno} ${isRawSelected ? styles.hornoTitila : ""}`}
+                onClick={handleHornoClick}
+            />
+
+            {/* Budín Crudo */}
             {!isCooked && (
                 <img
                     src="/objetos/budinSinCocinar.png"
                     alt="Budin sin cocinar"
-                    className={styles.imgBudinSinCocinar}
+                    className={`${styles.imgBudinSinCocinar} ${
+                        isRawSelected ? styles.selected : ""
+                    } ${isCooking ? styles.cocinando : ""}`}
                     style={{
-                        top: `${budinPosition.top}px`,
-                        left: `${budinPosition.left}px`,
-                        position: "absolute",
+                        top: budinPosition.top,
+                        left: budinPosition.left,
                     }}
-                    onClick={handleBudinClick}
-                />
+                onClick={handleBudinClick}/>
             )}
 
-            {/* Mostrar mensaje "DÍA 1 TERMINADO" cuando corresponda */}
-            {mensajeDiaTerminado && (
-                <div className={styles.diaTerminado}>
-                    <h2>¡DÍA 1 TERMINADO!</h2>
-                </div>
-            )}
-
+            {/* Budín Cocido / Decorado */}
             {isCooked && (
                 <img
                     src={
@@ -146,31 +189,43 @@ export default function cocinaLogica() {
                                 : "/objetos/budinCocido.png"
                     }
                     alt="Budin cocido"
-                    className={styles.imgBudinCocido}
+                    
+                    className={`${styles.imgBudinCocido} ${
+                        isBudinFinalSelected ? styles.selected : ""
+                    }`}
+
                     style={{
-                        top: `${budinPosition.top}px`,
-                        left: `${budinPosition.left}px`,
-                        position: "absolute",
+                        top: budinPosition.top,
+                        left: budinPosition.left,
                     }}
                     onClick={handleBudinCocidoClick}
                 />
             )}
 
+            {/* Ingredientes */}
             <img
                 src="/objetos/Vainilla.png"
                 alt="Vainilla"
-                className={styles.imgVainilla}
+                
+                className={`${styles.imgVainilla} ${
+                    isVainillaSelected ? styles.selected : ""
+                }`}
+
                 onClick={handleVainillaClick}
             />
 
             <img
                 src="/objetos/chocolate.png"
                 alt="Chocolate"
-                className={styles.imgChocolate}
+
+                className={`${styles.imgChocolate} ${
+                    isChocolateSelected ? styles.selected : ""
+                }`}
+
                 onClick={handleChocolateClick}
             />
 
-            {/* Muestra la flecha solo cuando se selecciona el budín final */}
+            {/* Flecha de envío */}
             {isBudinFinalSelected && (
                 <img
                     src="/objetos/flecha.png"
@@ -180,15 +235,11 @@ export default function cocinaLogica() {
                 />
             )}
 
-            {/*
-            <img
-                src="/objetos/cintaMecanica.png"
-                alt="Cinta Mecanica"
-                className={styles.imgCintaMecanica}
-            /> */}
-
+            {mensajeDiaTerminado && (
+                <div className={styles.diaTerminado}>
+                    <h2>¡DÍA 1 TERMINADO!</h2>
+                </div>
+            )}
         </div>
     );
 }
-
-

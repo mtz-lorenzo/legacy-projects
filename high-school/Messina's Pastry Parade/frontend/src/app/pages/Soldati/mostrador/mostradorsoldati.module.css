@@ -1,14 +1,19 @@
 /* Estilo para el contenedor principal con la imagen de fondo */
 .imgSoldati {
     position: relative;
-    height: 99vh; /* Asegura que ocupe toda la pantalla */
-    width: 100%;
-    background-image: url('/escenarios/mostradores/SOLDATI.png'); /* Ruta de la imagen en tu carpeta */
-    background-size: cover;
-    background-position: center;
-    overflow: hidden; /* Evita que cualquier contenido sobresalga */
-}
+    width: min(100vw, 177.78vh);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin: auto;
 
+    background-image: url('/escenarios/mostradores/SOLDATI.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    overflow: hidden;
+    --u: min(1vw, 1.7778vh);
+}
 /* Estilo para la radio (imagen interactiva) */
 #playImg {
     width: 120px; /* Ajusta el tamaño de la radio */
@@ -90,25 +95,17 @@
 /* Imagen que aparece y desaparece */
 .appearImage {
     position: absolute;
-    top: 460px; /* Centra verticalmente */
-    left: -600px; /* Comienza más afuera de la pantalla */
-    transform: translateY(-50%); /* Centra verticalmente */
-    max-width: 570px;
-    max-height: 570px;
+    top: 42.6%;
+    left: -31%;
+    transform: translateY(-50%);
+    max-width: 29.7%;
+    max-height: 52.8%;
     z-index: 10;
-    transition: left 1s ease-in-out; /* Suaviza el movimiento */
+    transition: left 1s ease-in-out;
 }
 
-/* Clase que desliza la imagen hacia adentro */
-.slideIn {
-    left: 20%; /* Detente en el 20% de la pantalla desde la izquierda */
-}
-
-/* Clase que desliza la imagen hacia afuera */
-.slideOut {
-    left: 120%; /* Desliza fuera de la pantalla hacia la derecha */
-    transition: left 0.7s ease-in-out; /* Tiempo y estilo de transición */
-}
+.slideIn  { left: 20%; }
+.slideOut { left: 120%; transition: left 0.7s ease-in-out; }
 
 
 /* Botón para cerrar el modal */
@@ -130,13 +127,13 @@
 /* Cuadro de diálogo estilo burbuja */
 .dialogueBox {
     position: absolute;
-    top: 370px; /* Ajusta según necesites para la posición del cuadro de diálogo */
+    top: 34.3%;
     left: 60%;
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 10px 15px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     color: #333;
     z-index: 20;
@@ -150,25 +147,43 @@
 
 .imgRadio {
     position: absolute;
-    top: 520px;
-    left: 1200px;
-    width: 450px;
-    height: 280px;
+    top: 55%;
+    left: 62.5%;
+    width: 23.4%;
+    height: 26%;
     z-index: 50;
 }
 
 .largerImage {
-    transform: scale(2.2); /* Ajusta el valor según el tamaño deseado */
-    top: 328px;
+    transform: scale(2.2);
+    top: 30.4%;
 }
 
 .budinImageContainer {
-    position: absolute; /* Cambia a absolute para poder moverlo */
-    top: 590px; /* Ajusta según necesites */
-    right: 830px; /* Ajusta según necesites */
-    width: 350px; /* Cambia el tamaño si es necesario */
+    position: absolute;
+    top: 65%;
+    left: 27%;
+    width: 22%;
+    height: auto;
     cursor: pointer;
-    z-index: 30; /* Asegúrate de que esté frente a los clientes */
+    z-index: 30;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.budinImageContainer:hover {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+    transform: scale(1.06);
+}
+
+/* Budín seleccionado: resplandor dorado */
+.selected {
+    filter: drop-shadow(0 0 10px rgba(255, 210, 60, 1));
+    transform: scale(1.06);
+}
+
+.budinVacio {
+    pointer-events: none;
+    cursor: default;
 }
 
 .budinImageChocolate {
@@ -182,37 +197,37 @@
 
 .imgCajaRegistradora {
     position: absolute;
-    top: 470px;
-    width: 580px;
-    height: 325px;
-    left: 840px;
+    top: 55.5%;
+    left: 43.75%;
+    width: 30.2%;
+    height: 30%;
     z-index: 30;
+    pointer-events: none;
 }
-
 .persiana {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 0;
     background-color: rgba(0, 0, 0, 0.8);
     background-image: url('/objetos/cortina.png');
-    background-size: cover; /* Asegura que la textura cubra todo el ancho */
+    background-size: cover;
     background-repeat: no-repeat;
     overflow: hidden;
-    z-index: 10; /* Asegura que esté detrás del budín y la radio */
+    z-index: 10;
     transition: height 0.6s ease-in-out;
 }
 
 /* Clase que controla la altura de la persiana cuando está "cerrada" */
 .persiana.abierta {
-    height: 73vh; /* Baja hasta un poco más de la mitad */
+    height: 73%;
 }
 
 /* Botón para abrir y cerrar la persiana */
 .persianaButton {
-    position: fixed;
-    top: 10px;
+    position: absolute;
+    top: 1%;
     left: 50%;
     transform: translateX(-50%);
     background-color: #8e8888;
@@ -221,7 +236,7 @@
     padding: 10px 15px;
     border-radius: 10px;
     cursor: pointer;
-    z-index: 9999; /* Asegura que esté sobre la persiana */
+    z-index: 9999;
 }
 
 .policeAlert {
@@ -249,3 +264,48 @@
     z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
 }
 
+.ticket {
+    position: absolute;
+    top: 0.1%;
+    left: 3%;
+    width: 16%;
+    padding: 0.8em 1em;
+    font-size: calc(var(--u) * 0.9);
+    background: #fffbe6;
+    color: #222;
+    border: 2px dashed #b9a95a;
+    border-radius: 0.5em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    z-index: 40;
+}
+
+.ticketTitulo {
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-bottom: 1px dashed #b9a95a;
+    padding-bottom: 0.3em;
+}
+
+.ticketBudin {
+    font-size: 1.1em;
+    text-transform: capitalize;
+}
+
+.ticketBoton {
+    background: #febfff;
+    border: none;
+    border-radius: 0.4em;
+    padding: 0.5em;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.ticketBoton:disabled {
+    background: #cfcfcf;
+    cursor: default;
+}
