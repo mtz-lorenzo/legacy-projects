@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Guessr</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <section id="login">     
+               
+        <a href="adminIndex.html" class="admin-link">BETA</a>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" id="password">
+            </div>
+            <div class="form-group">
+                <button class="form-check-control btn btn-primary" onclick="handleLogin()">Login</button>
+            </div>
+            <div class="form-group">
+                <button class="form-check-control btn btn-danger" onclick="showRegister()">Register</button>
+            </div> 
+        </section>
+        <section id="register">
+            <div class="form-group">
+                <label for="new-username">New Username</label>
+                <input class="form-control" type="text" id="newUsername">
+            </div>
+            <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input class="form-control" type="password" id="newPassword">
+            </div>
+            <div class="form-group">
+                <button class="form-check-control btn btn-danger" onclick="handleRegister()">Register</button>
+            </div>
+        </section>
+
+
+
+    <section id="game">
+        <div id="guess team">
+            <img src="" id="team-image" width="530px" height="380px">
+            <p>Guess the team</p>
+            <div id="score-square"></div> 
+            <input class="form-control" type="text" id="teamGuess" autocomplete="off">
+            <button class="form-check-control btn btn-success" onclick="handleCheckGuess()">Submit Guess</button>
+        </div>
+
+        <div id="guess player">
+            <img src="" id="player-image" width="530px" height="380px">
+            <p>Guess it's Top Scorer</p>
+            <input class="form-control" type="text" id="guessed-player">
+            <button class="form-check-control btn btn-success" onclick="checkPlayerGuess()">Submit Guess</button>
+        </div>
+    </section>
+    <section id="badScore">
+        <div id="score-square1"></div>
+        <img src="" id="bad-score-gif" width="1600" height="850"></img>
+        <p id="failure-message">YOU FAILED!</p>
+        <button onclick="restartGame()" id="play-again-btn">PLAY AGAIN</button>
+    </section>
+    <section id="midScore">
+        <div id="score-square2"></div>
+        <img src="" id="mid-score-gif" width="1600" height="850"></img>
+        <p id="mid-message">NOT BAD</p>
+        <button onclick="restartGame()" id="play-again-btn">PLAY AGAIN</button>
+    </section>
+    <section id="goodScore">
+        <div id="score-square3"></div>
+        <img src="" id="good-score-gif" width="1600" height="850"></img>
+        <p id="succeed-message">YOU'VE DONE IT!</p>
+        <button onclick="restartGame()" id="play-again-btn">PLAY AGAIN</button>
+    </section>
+</body>
+<script src="functions.js"></script>
+<script src="script.js"></script>
+<script src="dom.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+</html>
