@@ -156,10 +156,10 @@
 /* Zona clickeable del horno (invisible hasta que hay un crudo seleccionado) */
 .horno {
     position: absolute;
-    top: 58%;
+    top: 55%;
     left: 69%;
-    width: 27%;
-    height: 39%;
+    width: 29%;
+    height: 44%;
     border-radius: 8px;
     z-index: 20;
     pointer-events: none;   /* no se puede clickear si no hay nada seleccionado */
