@@ -33,6 +33,7 @@ export default function MostradorJuego() {
 
     const playImgRef = useRef(null);
     const soundRef = useRef(null);
+    const sfxRef = useRef({});
     const scoreRef = useRef(0);
     const pedidoRef = useRef(null);
     const finDiaRef = useRef(false);   // el día ya terminó
@@ -47,6 +48,29 @@ export default function MostradorJuego() {
             soundRef.current?.pause();
         };
     }, []);
+
+        // Efectos de sonido (solo en el navegador)
+    useEffect(() => {
+        sfxRef.current = {
+            caja: new Audio('/sound/caja.mp3'),
+            libro: new Audio('/sound/libro.mp3'),
+            enojado: new Audio('/sound/enojado.mp3'),
+            persiana: new Audio('/sound/persiana.mp3'),
+        };
+        Object.values(sfxRef.current).forEach((a) => {
+            a.volume = 0.7; // de 0 a 1
+        });
+        return () => {
+            Object.values(sfxRef.current).forEach((a) => a.pause());
+        };
+    }, []);
+
+    const reproducirSfx = (nombre) => {
+        const sfx = sfxRef.current[nombre];
+        if (!sfx) return;
+        sfx.currentTime = 0; // por si se repite rápido
+        sfx.play().catch(() => {});
+    };
 
     const handlePlayMusic = () => {
         const sound = soundRef.current;
@@ -65,6 +89,7 @@ export default function MostradorJuego() {
         finDiaRef.current = true;
 
         setClienteActual(null);
+        reproducirSfx("persiana");
         setPersianaAbierta(true); // baja la persiana
 
         const t1 = setTimeout(() => {
@@ -155,6 +180,7 @@ export default function MostradorJuego() {
 
             finDiaRef.current = true;
             const t1 = setTimeout(() => {
+                reproducirSfx("persiana");
                 setPersianaAbierta(true);
                 const t2 = setTimeout(() => {
                     setMensajeDiaTerminado(true);
@@ -167,8 +193,16 @@ export default function MostradorJuego() {
         }
     };
 
-    const togglePersiana = () => setPersianaAbierta((prev) => !prev);
-    const toggleRecipeModal = () => setShowRecipeModal((prev) => !prev);
+    const togglePersiana = () => {
+        reproducirSfx("persiana");
+        setPersianaAbierta((prev) => !prev);
+
+    };    
+
+    const toggleRecipeModal = () => {
+        if (!showRecipeModal) reproducirSfx("libro");
+        setShowRecipeModal((prev) => !prev);
+    };
 
     const handleBudinClick = () => {
         if (budinURL === BUDIN_VACIO) return;
@@ -194,8 +228,11 @@ export default function MostradorJuego() {
     const handlePedidoEntregado = () => {
         if (validarBudin()) {
             setScore((prev) => prev + 300);
+            reproducirSfx("caja");
         } else {
             setScore((prev) => prev - 50);
+            reproducirSfx("enojado");
+
         }
 
         setBudinURL(BUDIN_VACIO);

@@ -1,0 +1,36 @@
+/* Contenedor que ocupa el mismo espacio 16:9 que el escenario */
+.single {
+    position: relative;
+    width: min(100vw, 177.78vh);
+    aspect-ratio: 16 / 9;
+    margin: auto;
+    --u: min(1vw, 1.7778vh);
+}
+
+/* Botón para cambiar de vista */
+.botonVista {
+    position: absolute;
+    bottom: 3%;
+    right: 2%;
+    z-index: 9000;
+
+    padding: 0.8em 1.6em;
+    font-size: calc(var(--u) * 1.1);
+    font-weight: bold;
+    color: #222;
+    background: #febfff;
+    border: 2px solid #222;
+    border-radius: 0.6em;
+    box-shadow: 0 4px 0 #222;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
+}
+
+.botonVista:hover {
+    filter: brightness(1.08) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+}
+
+.botonVista:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #222;
+}
