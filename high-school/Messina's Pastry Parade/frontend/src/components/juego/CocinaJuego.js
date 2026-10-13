@@ -4,9 +4,11 @@ import { useEffect, useState, useRef } from "react";
 import styles from "@/app/pages/Soldati/cocina/cocinasoldati.module.css";
 import { useSocket } from "@/hooks/socket";
 import Score from '@/components/Score';
+import { useSala } from "@/hooks/useSala";
+import { PUNTAJE_OBJETIVO } from "@/components/juego/config";
 import { useRouter } from 'next/navigation';
 
-export default function CocinaJuego() {
+export default function CocinaJuego({ sala }) {
     // POSICIONES EN % (Mesada vs Horno)
 const POSICION_INICIAL = { top: "44%", left: "42%" };
 const POSICION_HORNO = { top: "65%", left: "76%" };
@@ -28,6 +30,7 @@ const POSICION_LISTO = { top: "44%", left: "42%" };
     const [mensajeDiaTerminado, setMensajeDiaTerminado] = useState(false);
     
     const { socket, isConnected } = useSocket();
+    const enSala = useSala(socket, isConnected, sala);
     const router = useRouter();
 
     // Sockets
@@ -57,12 +60,12 @@ const POSICION_LISTO = { top: "44%", left: "42%" };
 
     // Flujo de victoria
     useEffect(() => {
-        if (score < 1400) return;
+        if (score < PUNTAJE_OBJETIVO) return;
 
         let t2;
         const t1 = setTimeout(() => {
             setMensajeDiaTerminado(true);
-            t2 = setTimeout(() => router.push('/pages/Liniers/cocina'), 5000);
+            t2 = setTimeout(() => router.push(`/pages/Liniers/cocina?sala=${sala}`), 5000);
         }, 3000);
 
         return () => {
@@ -154,7 +157,7 @@ const POSICION_LISTO = { top: "44%", left: "42%" };
 
     return (
         <div className={styles.imgSoldatiCocina}>
-            <Score score={score} />
+            <Score objetivo={PUNTAJE_OBJETIVO} />
             {pedidoCocina && (
                 <div className={styles.ticket}>
                     <span className={styles.ticketTitulo}>PEDIDO</span>

@@ -1,12 +1,14 @@
 // app/pages/Soldati/single/page.js
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./single.module.css";
 import MostradorJuego from "@/components/juego/MostradorJuego";
 import CocinaJuego from "@/components/juego/CocinaJuego";
 
-export default function Single() {
+// El juego en sí (lo que ya tenías), ahora recibe la sala
+function Juego({ sala }) {
     const [vista, setVista] = useState("mostrador");
     const ocultar = {
         visibility: "hidden",
@@ -20,10 +22,10 @@ export default function Single() {
     return (
         <div className={styles.single}>
             <div style={vista === "mostrador" ? { position: "relative" } : ocultar}>
-                <MostradorJuego />
+                <MostradorJuego sala={sala} />
             </div>
             <div style={vista === "cocina" ? { position: "relative" } : ocultar}>
-                <CocinaJuego />
+                <CocinaJuego sala={sala} />
             </div>
 
             <button
@@ -34,4 +36,21 @@ export default function Single() {
             </button>
         </div>
     );
+}
+
+// Lee la sala de la URL y, si no hay, vuelve al menú
+function Contenido() {
+    const sala = useSearchParams().get("sala");
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!sala) router.replace("/sala");
+    }, [sala, router]);
+
+    if (!sala) return null;
+    return <Juego sala={sala} />;
+}
+
+export default function Page() {
+    return <Suspense fallback={null}><Contenido /></Suspense>;
 }

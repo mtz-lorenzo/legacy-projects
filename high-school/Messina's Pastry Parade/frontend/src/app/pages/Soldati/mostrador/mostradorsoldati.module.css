@@ -237,19 +237,32 @@
     height: 73%;
 }
 
-/* Botón para abrir y cerrar la persiana */
 .persianaButton {
-    position: absolute;
-    top: 1%;
+    position: absolute;          /* antes: fixed */
+    top: 1.5%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #8e8888;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    cursor: pointer;
     z-index: 9999;
+
+    padding: 0.6em 1.4em;
+    font-size: calc(var(--u, 1vw) * 1.1);
+    font-weight: bold;
+    color: #222;
+    background: #8e8888;
+    border: 2px solid #222;
+    border-radius: 0.6em;
+    box-shadow: 0 4px 0 #222;
+    cursor: pointer;
+    transition: filter 0.2s ease, box-shadow 0.1s ease;
+}
+
+.persianaButton:hover {
+    filter: brightness(1.08) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+}
+
+.persianaButton:active {
+    transform: translateX(-50%) translateY(3px);
+    box-shadow: 0 1px 0 #222;
 }
 
 .policeAlert {
@@ -321,4 +334,33 @@
 .ticketBoton:disabled {
     background: #cfcfcf;
     cursor: default;
+}
+
+/* Pantalla negra de la caja registradora */
+.cajaPantalla {
+    position: absolute;
+    top: 59%;
+    left: 55%;
+    width: 10%;
+    height: 3%;
+    z-index: 35;
+    pointer-events: none;   /* no tapa clics */
+    white-space: nowrap;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0;
+    box-sizing: border-box;
+
+    font-family: 'VT323', 'Courier New', monospace;
+    font-size: calc(var(--u, 1vw) * 2.2);
+    color: #39ff14;
+    text-shadow: 0 0 6px rgba(57, 255, 20, 0.8);
+    letter-spacing: 0.1px;
+}
+
+.cajaNegativa {
+    color: #ff3b30;
+    text-shadow: 0 0 6px rgba(255, 59, 48, 0.8);
 }

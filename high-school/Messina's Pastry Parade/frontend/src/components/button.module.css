@@ -1,33 +1,52 @@
-.button { 
-    border: none;
-    border-radius: 30px;
-    color: #000; /* Texto negro */
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    margin: 10px;
-    height: 37px;
-    justify-content: center;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s ease;
-} 
+/* src/components/Button.module.css */
 
-.button:hover {
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);
+/* Base: mismo diseño que Recetas / Ir a cocina */
+.button {
+    padding: 0.8em 1.6em;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #222;
+    background: #fff;
+    border: 2px solid #222;
+    border-radius: 0.6em;
+    box-shadow: 0 4px 0 #222;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.2s ease;
 }
 
+.button:hover {
+    filter: brightness(1.08) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+}
+
+.button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #222;
+}
+
+/* Deshabilitado */
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+    box-shadow: 0 4px 0 #222;
+}
+
+/* Variantes */
 .variant_jugar {
-    background-color: #eb8686; /* Rojo */
+    background: #febfff;   /* rosa del juego */
 }
 
 .variant_puntuacion {
-    background-color: #eb8686; /* Rojo */
+    background: #ffd23c;   /* dorado */
 }
 
 .variant_salir {
-    background-color: #eb8686; /* Rojo */
+    background: #ff8a80;   /* rojo suave */
+}
+
+.variant_volver {
+    background: #e6e6e6;   /* gris: acción secundaria */
+    font-size: 0.95rem;
 }

@@ -155,7 +155,7 @@ INSERT INTO ClientesEscenarios (idCliente, idEscenario) VALUES
 
 
 */
-/*
+/*clientesescenarios
 SET SQL_SAFE_UPDATES = 0;
 
 -- Actualización de frases de llegada y salida matcheando por 'skin'
@@ -387,4 +387,4 @@ WHERE skin = 'walter.png';
 
 SET SQL_SAFE_UPDATES = 1;
 */
-SELECT * FROM clientes
+SELECT username, COUNT(*) FROM Usuarios GROUP BY username HAVING COUNT(*) > 1;

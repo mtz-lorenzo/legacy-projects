@@ -1,14 +1,10 @@
-"use client"
-// Score.js
-import React from 'react';
-import styles from './Score.module.css'; // Import the CSS module
+import styles from "./Score.module.css";
 
-const Score = ({ score }) => {
+export default function Score({ objetivo }) {
     return (
-        <div className={styles.score}>
-            <p>💰 Pesos: {score}</p>
+        <div className={styles.objetivo}>
+            <span className={styles.etiqueta}>OBJETIVO</span>
+            <span className={styles.valor}>${objetivo}</span>
         </div>
     );
-};
-
-export default Score;
+}

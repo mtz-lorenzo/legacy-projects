@@ -7,24 +7,24 @@ const MySQL = require('./modulos/mysql');				// mysql.js link
 const session = require('express-session');				// Session variables 
 const cors = require("cors");                           // Front-Back communication
 
-const app = express();									
+const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));	
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
-const LISTEN_PORT = 4000;								
+const LISTEN_PORT = 4000;
 
 const server = app.listen(LISTEN_PORT, () => {
 	console.log(`Servidor NodeJS corriendo en http://localhost:${LISTEN_PORT}/`);
-});;
+});
 
 const io = require('socket.io')(server, {
 	cors: {
-		origin: ["http://localhost:3000","http://localhost:3001"],       // Allows localhost:3000 y 3001
-		methods: ["GET", "POST", "PUT", "DELETE"],  		// Allowed Methods
-		credentials: true                           // Allows Cookies
+		origin: ["http://localhost:3000", "http://localhost:3001"],	// Allows localhost:3000 y 3001
+		methods: ["GET", "POST", "PUT", "DELETE"],					// Allowed Methods
+		credentials: true											// Allows Cookies
 	}
 });
 
@@ -41,95 +41,132 @@ io.use((socket, next) => {
 	sessionMiddleware(socket.request, {}, next);
 });
 
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-// A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
+// ============================================================
+// A PARTIR DE ESTE PUNTO: PETICIONES HTTP, MANEJO DB, SOCKETS
+// ============================================================
 
 app.get('/', (req, res) => {
 	console.log(`[REQUEST - ${req.method}] ${req.url}`);
+	res.send("OK");
 });
 
 app.post('/login', async (req, res) => {
-	let usuario;
-	console.log("Recibi: ", req.body);
+	try {
+		console.log("Recibi login de:", req.body.username);
 
-	usuario = await MySQL.realizarQuery(`SELECT idUsuarios FROM Usuarios WHERE username='${req.body.username}' AND password='${req.body.password}';`);
-	if (usuario.length != 0) {
-		console.log(usuario);
-		res.send(usuario)
-	} else {
-		res.send([]);
+		const usuario = await MySQL.realizarQuery(
+			"SELECT idUsuarios FROM Usuarios WHERE username = ? AND password = ?",
+			[req.body.username, req.body.password]
+		);
+		res.send(usuario.length != 0 ? usuario : []);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send([]);
 	}
 });
 
 app.post('/register', async (req, res) => {
-	let usuario;
-	console.log("Recibi: ", req.body);
-
-	usuario = await MySQL.realizarQuery(`INSERT INTO Usuarios (username, password) VALUES ('${req.body.username}', '${req.body.password}');`);
-	if (usuario.length != 0) {
-		console.log(usuario);
-		res.send(usuario)
-	} else {
-		res.send([]);
+	try {
+		await MySQL.realizarQuery(
+			"INSERT INTO Usuarios (username, password) VALUES (?, ?)",
+			[req.body.username, req.body.password]
+		);
+		res.send({ ok: true });
+	} catch (err) {
+		if (err.code === 'ER_DUP_ENTRY') {
+			return res.status(409).send({ ok: false, error: "El usuario ya existe" });
+		}
+		console.error(err);
+		res.status(500).send({ ok: false, error: "Error del servidor" });
 	}
 });
 
 app.get('/clientesPorEscenario', async (req, res) => {
-	let idEscenario = req.query.idEscenario;
-	const idClientes = await MySQL.realizarQuery(`SELECT idCliente FROM ClientesEscenarios WHERE idEscenario=${idEscenario}`);
-	
-	let vectorClientes = [];
-	for (let i=0; i<idClientes.length; i++) {
-		let cliente = await MySQL.realizarQuery(`SELECT * FROM Clientes WHERE idCliente=${idClientes[i].idCliente}`);
-		vectorClientes.push(cliente[0]);
+	try {
+		const idEscenario = Number(req.query.idEscenario);
+		if (!Number.isInteger(idEscenario)) {
+			return res.status(400).send([]);
+		}
+
+		const clientes = await MySQL.realizarQuery(
+			`SELECT c.* 
+			 FROM Clientes c
+			 INNER JOIN ClientesEscenarios ce ON ce.idCliente = c.idCliente
+			 WHERE ce.idEscenario = ?`,
+			[idEscenario]
+		);
+		res.send(clientes);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send([]);
 	}
-	res.send(vectorClientes);
 });
-/*
-app.get('/randomClient', (req, res) => {
-    MySQL.realizarQuery(`SELECT skin FROM Clientes ORDER BY RAND() LIMIT 1;`)
-        .then(randomClient => {
-            // Verificar si el campo 'skin' existe en el resultado
-            if (randomClient && randomClient[0] && randomClient[0].skin) {
-                res.json({ skin: randomClient[0].skin });
-            } else {
-                res.status(404).json({ error: 'No skin found' });
-            }
-        })
-        .catch(err => {
-            // Manejar errores
-            console.error('Error fetching random client skin:', err);
-            res.status(500).json({ error: 'Internal server error' });
-        });
-});
-*/
+
 app.delete('/login', (req, res) => {
 	console.log(`[REQUEST - ${req.method}] ${req.url}`);
 	res.send(null);
 });
 
-// app.get("/codigo")
+// ---------- SALAS ----------
+const ALFABETO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sin 0/O/1/I para no confundir
+const salas = new Map(); // codigo -> última actividad (ms)
 
+function generarCodigo() {
+	let codigo;
+	do {
+		codigo = '';
+		for (let i = 0; i < 4; i++) {
+			codigo += ALFABETO[Math.floor(Math.random() * ALFABETO.length)];
+		}
+	} while (salas.has(codigo));
+	return codigo;
+}
+
+// Borra salas vacías e inactivas hace más de 10 minutos
+setInterval(() => {
+	const ahora = Date.now();
+	for (const [codigo, ultima] of salas) {
+		const sala = io.sockets.adapter.rooms.get(codigo);
+		if (!sala && ahora - ultima > 10 * 60 * 1000) salas.delete(codigo);
+	}
+}, 60 * 1000);
+
+// ---------- SOCKETS ----------
 io.on("connection", (socket) => {
-	const req = socket.request;
 
-	socket.on('joinRoom', data => {
-		console.log("🚀 ~ io.on ~ req.session.room:", req.session.room)
-		if (req.session.room != undefined && req.session.room.length > 0)
-			socket.leave(req.session.room);
-		req.session.room = data.room;
-		//Aca agregar validación por si son mas de 2 users
-		socket.join(req.session.room);
-
-		io.to(req.session.room).emit('chat-messages', { user: req.session.user, room: req.session.room });
+	// Crear una sala nueva (la usan single y multi)
+	socket.on('crearSala', (cb) => {
+		const codigo = generarCodigo();
+		salas.set(codigo, Date.now());
+		if (typeof cb === 'function') cb({ ok: true, codigo });
 	});
+
+	// Verificar que una sala exista (antes de elegir mostrador/cocina)
+	socket.on('existeSala', (data, cb) => {
+		const codigo = String(data?.room ?? '').trim().toUpperCase();
+		if (typeof cb === 'function') cb({ ok: salas.has(codigo) });
+	});
+
+	// Unirse a una sala (lo hacen las pantallas del juego al montarse)
+	socket.on('joinRoom', (data, cb) => {
+		const codigo = String(data?.room ?? '').trim().toUpperCase();
+		if (!salas.has(codigo)) {
+			if (typeof cb === 'function') cb({ ok: false });
+			return;
+		}
+		if (socket.data.room) socket.leave(socket.data.room);
+		socket.data.room = codigo;
+		socket.join(codigo);
+		salas.set(codigo, Date.now());
+		if (typeof cb === 'function') cb({ ok: true });
+	});
+
+	// Reenvía un evento solo a la sala de este socket
+	const aLaSala = (evento, payload) => {
+		const room = socket.data.room;
+		if (!room) return;
+		io.to(room).emit(evento, payload);
+	};
 
 	socket.on('pingAll', data => {
 		console.log("PING ALL: ", data);
@@ -137,32 +174,29 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on('sendMessage', data => {
-		io.to(req.session.room).emit('newMessage', { room: req.session.room, message: data });
+		aLaSala('newMessage', { room: socket.data.room, message: data });
 	});
 
 	socket.on('budinCocina', data => {
-		console.log(data);
-		//Hay que hacer que solo se lo mande al de la sala
-		io.emit('budinMostrador', {budin: data.budin});
+		aLaSala('budinMostrador', { budin: data.budin });
 	});
 
 	socket.on('scoreMostrador', data => {
-		console.log(data);
-		//Hay que hacer que solo se lo mande al de la sala
-		io.emit('scoreCocina', {score: data.score});
+		aLaSala('scoreCocina', { score: data.score });
 	});
 
 	socket.on('pedidoMostrador', data => {
-		console.log(data);
-		//Hay que hacer que solo se lo mande al de la sala
-		io.emit('pedidoCocina', { budin: data.budin });
+		aLaSala('pedidoCocina', { budin: data.budin });
 	});
 
 	socket.on('pedidoCancelado', () => {
-		io.emit('pedidoCancelado');
+		aLaSala('pedidoCancelado');
 	});
 
 	socket.on('disconnect', () => {
+		if (socket.data.room && salas.has(socket.data.room)) {
+			salas.set(socket.data.room, Date.now());
+		}
 		console.log("Disconnect");
-	})
+	});
 });

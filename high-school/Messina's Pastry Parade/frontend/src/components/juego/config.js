@@ -1,0 +1,1 @@
+export const PUNTAJE_OBJETIVO = 1400;

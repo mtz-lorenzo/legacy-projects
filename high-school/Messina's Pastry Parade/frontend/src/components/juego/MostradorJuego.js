@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Cliente from '@/components/Clientes/';
 import styles from '@/app/pages/Soldati/mostrador/mostradorsoldati.module.css';
 import Score from '@/components/Score';
+import { useSala } from "@/hooks/useSala";
+import { PUNTAJE_OBJETIVO } from "@/components/juego/config";
 import { useSocket } from "@/hooks/socket";
 import { useRouter } from 'next/navigation';
 
@@ -17,7 +19,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-export default function MostradorJuego() {
+export default function MostradorJuego({ sala }) {    
     const [score, setScore] = useState(0);
     const [clientes, setClientes] = useState([]);
     const [clienteActual, setClienteActual] = useState(null);
@@ -39,6 +41,7 @@ export default function MostradorJuego() {
     const finDiaRef = useRef(false);   // el día ya terminó
     const timersRef = useRef([]);      // para limpiar al desmontar
     const { socket, isConnected } = useSocket();
+    const enSala = useSala(socket, isConnected, sala);
     const router = useRouter();
 
     // Audio (solo en el navegador)
@@ -85,7 +88,7 @@ export default function MostradorJuego() {
 
     // Fin de día: misma regla que la cocina (score >= 1400)
     useEffect(() => {
-        if (score < 1400 || finDiaRef.current) return;
+        if (score < PUNTAJE_OBJETIVO || finDiaRef.current) return;
         finDiaRef.current = true;
 
         setClienteActual(null);
@@ -94,8 +97,7 @@ export default function MostradorJuego() {
 
         const t1 = setTimeout(() => {
             setMensajeDiaTerminado(true);
-            const t2 = setTimeout(() => router.push('/pages/Liniers/mostrador'), 5000);
-            timersRef.current.push(t2);
+            const t2 = setTimeout(() => router.push(`/pages/Liniers/mostrador?sala=${sala}`), 5000);            timersRef.current.push(t2);
         }, 3000);
         timersRef.current.push(t1);
     }, [score, router]);
@@ -107,9 +109,9 @@ export default function MostradorJuego() {
 
     // Emitir score a la cocina
     useEffect(() => {
-        if (!socket) return;
+        if (!socket || !enSala) return;
         socket.emit('scoreMostrador', { score });
-    }, [score, socket]);
+    }, [score, socket, enSala]);
 
     // Recibir el budín terminado desde la cocina
     useEffect(() => {
@@ -252,7 +254,7 @@ export default function MostradorJuego() {
 
     return (
         <div className={styles.imgSoldati}>
-            <Score score={score} />
+            <Score objetivo={PUNTAJE_OBJETIVO} />
 
             {clienteActual && (
                 <Cliente
@@ -335,6 +337,11 @@ export default function MostradorJuego() {
                 alt="Caja registradora"
                 className={styles.imgCajaRegistradora}
             />
+
+            <div className={`${styles.cajaPantalla} ${score < 0 ? styles.cajaNegativa : ""}`}>
+            {score < 0 ? "-" : ""}${Math.abs(score)}
+            </div>
+
 
             <div className={styles.persianaContainer}>
                 <div className={`${styles.persiana} ${persianaAbierta ? styles.abierta : ""}`}></div>

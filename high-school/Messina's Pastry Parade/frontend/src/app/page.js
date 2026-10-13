@@ -44,19 +44,22 @@ export default function loginPage() {
             password: password
         }
         console.log(datos);
+
         const response = await fetch("http://localhost:4000/register", {
             method: "POST",
-            body: JSON.stringify(datos),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+        });
+        const data = await response.json();
 
-        const respuesta = await response.json();
-        if (respuesta.length != 0) {
-            router.push("/sala");
-        } else
-            alert("Datos incorrectos");
+        if (!response.ok || !data.ok) {
+            alert(data.error || "No se pudo registrar");
+            return; // corta acá: no avanza de pantalla
+        }
+
+        // solo si salió bien:
+        router.push("/sala");
+
     }
 
     function handleInputs(event) {
